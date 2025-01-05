@@ -1,20 +1,30 @@
-import { useEffect, useState } from 'react';
-import axios from 'axios';
-import MovieList from '../../components/MovieList/MovieList';
-import s from './HomePage.module.css';
+import { useEffect, useState } from "react";
+import axios from "axios";
+import MovieList from "../../components/MovieList/MovieList";
+import s from "./HomePage.module.css";
 
 function HomePage() {
   const [movies, setMovies] = useState([]);
 
   useEffect(() => {
-    axios
-  .get('https://api.themoviedb.org/3/trending/movie/day', {
-    headers: { Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmMjRmMDNjY2YwYTY1MGY1NmQyNWFiNzdlNzc2ZDQ5NSIsIm5iZiI6MTczNTg5MTA2OS4xMDA5OTk4LCJzdWIiOiI2Nzc3OTg3ZDMyMWEzYTE2NmE3NDk0ZTUiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.Au8o-qnGToeBo2SDCU9e84NCfmb37TJoIgPFn4kvC7A'},
-  })
-  .then((response) => setMovies(response.data.results))
-  .catch((error) => console.error('Error fetching trending movies:', error));
-  setMovies([]);
-});
+    const fetchTrendingMovies = async () => {
+      try {
+        const response = await axios.get(
+          "https://api.themoviedb.org/3/trending/movie/day",
+          {
+            headers: {
+              Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmMjRmMDNjY2YwYTY1MGY1NmQyNWFiNzdlNzc2ZDQ5NSIsIm5iZiI6MTczNTg5MTA2OS4xMDA5OTk4LCJzdWIiOiI2Nzc3OTg3ZDMyMWEzYTE2NmE3NDk0ZTUiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.Au8o-qnGToeBo2SDCU9e84NCfmb37TJoIgPFn4kvC7A`,
+            },
+          }
+        );
+        setMovies(response.data.results);
+      } catch (error) {
+        console.error("Error fetching trending movies:", error);
+      }
+    };
+
+    fetchTrendingMovies();
+  }, []);
 
   return (
     <div className={s.container}>
