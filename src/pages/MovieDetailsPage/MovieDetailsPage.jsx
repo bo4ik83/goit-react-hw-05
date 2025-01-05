@@ -1,6 +1,6 @@
 import { useParams, Link, Outlet, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { fetchMovieDetails } from "../service/api";
+import { fetchMovieDetails } from "../../service/api";
 
 function MovieDetailsPage() {
   const { movieId } = useParams();
