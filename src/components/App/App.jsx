@@ -1,8 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import Navigation from "../Navigation/Navigation.jsx";
-import Cast from "../MovieCast/MovieCast.jsx";
-import Reviews from "../MovieReviews/MovieReviews.jsx";
 import "./App.css";
 
 // Асинхронне завантаження сторінок
@@ -14,6 +12,8 @@ const MovieDetailsPage = lazy(() =>
 const NotFoundPage = lazy(() =>
   import("../../pages/NotFoundPage/NotFoundPage.jsx")
 );
+const Cast = lazy(() => import("../MovieCast/MovieCast.jsx"));
+const Reviews = lazy(() => import("../MovieReviews/MovieReviews.jsx"));
 
 function App() {
   return (
@@ -23,9 +23,10 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/movies" element={<MoviesPage />} />
-          <Route path="/movies/:movieId" element={<MovieDetailsPage />} />
-          <Route path="cast" element={<Cast />} />
-          <Route path="reviews" element={<Reviews />} />
+          <Route path="/movies/:movieId" element={<MovieDetailsPage />}>
+            <Route path="cast" element={<Cast />} />
+            <Route path="reviews" element={<Reviews />} />
+          </Route>
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Suspense>

@@ -1,35 +1,37 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import { fetchTrendingMovies } from "../../service/api"; // Винесений API-запит
 import MovieList from "../../components/MovieList/MovieList";
 import s from "./HomePage.module.css";
 
 function HomePage() {
   const [movies, setMovies] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchTrendingMovies = async () => {
+    const loadTrendingMovies = async () => {
+      setLoading(true);
+      setError(null);
       try {
-        const response = await axios.get(
-          "https://api.themoviedb.org/3/trending/movie/day",
-          {
-            headers: {
-              Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmMjRmMDNjY2YwYTY1MGY1NmQyNWFiNzdlNzc2ZDQ5NSIsIm5iZiI6MTczNTg5MTA2OS4xMDA5OTk4LCJzdWIiOiI2Nzc3OTg3ZDMyMWEzYTE2NmE3NDk0ZTUiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.Au8o-qnGToeBo2SDCU9e84NCfmb37TJoIgPFn4kvC7A`,
-            },
-          }
-        );
-        setMovies(response.data.results);
+        const results = await fetchTrendingMovies(); // Використовуємо утиліту для запиту
+        setMovies(results);
       } catch (error) {
         console.error("Error fetching trending movies:", error);
+        setError("Failed to load trending movies. Please try again later.");
+      } finally {
+        setLoading(false);
       }
     };
 
-    fetchTrendingMovies();
+    loadTrendingMovies();
   }, []);
 
   return (
     <div className={s.container}>
       <h1 className={s.title}>Trending Movies</h1>
-      <MovieList movies={movies} />
+      {loading && <p className={s.loading}>Loading...</p>}
+      {error && <p className={s.error}>{error}</p>}
+      {!loading && !error && <MovieList movies={movies} />}
     </div>
   );
 }
