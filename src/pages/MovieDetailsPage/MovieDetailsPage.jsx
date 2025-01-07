@@ -1,4 +1,10 @@
-import { useParams, Link, Outlet, useNavigate } from "react-router-dom";
+import {
+  useParams,
+  Link,
+  Outlet,
+  useNavigate,
+  useLocation,
+} from "react-router-dom";
 import { useEffect, useState } from "react";
 import { fetchMovieDetails } from "../../service/api";
 import s from "./MovieDetailsPage.module.css";
@@ -7,6 +13,9 @@ const MovieDetailsPage = () => {
   const { movieId } = useParams(); // Отримуємо ідентифікатор фільму з URL
   const [movie, setMovie] = useState(null); // Стан для зберігання деталей фільму
   const navigate = useNavigate(); // Для повернення назад
+  const location = useLocation();
+
+  const previousLocation = location.state?.from || "/";
 
   useEffect(() => {
     fetchMovieDetails(movieId)
@@ -20,7 +29,7 @@ const MovieDetailsPage = () => {
 
   return (
     <div className={s.container}>
-      <button className={s.goBack} onClick={() => navigate(-1)}>
+      <button className={s.goBack} onClick={() => navigate(previousLocation)}>
         Go back
       </button>
       <div className={s.details}>
