@@ -10,12 +10,12 @@ import { fetchMovieDetails } from "../../service/api";
 import s from "./MovieDetailsPage.module.css";
 
 const MovieDetailsPage = () => {
-  const { movieId } = useParams(); // Отримуємо ідентифікатор фільму з URL
-  const [movie, setMovie] = useState(null); // Стан для зберігання деталей фільму
-  const navigate = useNavigate(); // Для повернення назад
+  const { movieId } = useParams();
+  const [movie, setMovie] = useState(null);
+  const navigate = useNavigate();
   const location = useLocation();
 
-  const previousLocation = location.state?.from || "/";
+  const previousLocation = location.state?.from || "/movies";
 
   useEffect(() => {
     fetchMovieDetails(movieId)
@@ -48,10 +48,10 @@ const MovieDetailsPage = () => {
         </div>
       </div>
       <div className={s.links}>
-        <Link to="cast" className={s.link}>
+        <Link to="cast" state={{ from: previousLocation }} className={s.link}>
           Cast
         </Link>
-        <Link to="reviews" className={s.link}>
+        <Link to="reviews" state={{ from: previousLocation }} className={s.link}>
           Reviews
         </Link>
       </div>
